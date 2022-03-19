@@ -1,7 +1,8 @@
+--This gets Data from a trello board and turns it into a table.
 local houses = {}
 
 
-local HouseData = {
+local HouseData = { --This creates the basic tables with all the kingdoms. 
 	["Soren"] = {
 
 	},
@@ -17,11 +18,11 @@ local HouseData = {
 function houses.Init()
 	local https = game:GetService("HttpService")
 	local api = require(game.ServerScriptService:WaitForChild("TrelloAPI"))
-	local treldata = api:GetBoardID("BallaydenData")
+	local treldata = api:GetBoardID("BallaydenData") --gets the trello
 	--Getting Houses
-	local SorenNames = api:GetCardsInList(api:GetListID("Soren Houses",treldata))
-	local CreitheeNames = api:GetCardsInList(api:GetListID("Creithee Houses",treldata))
-	local ThaelariousNames = api:GetCardsInList(api:GetListID("Thaelarious Houses",treldata))
+	local SorenNames = api:GetCardsInList(api:GetListID("Soren Houses",treldata))--this gets some of the houses
+	local CreitheeNames = api:GetCardsInList(api:GetListID("Creithee Houses",treldata))--this gets some of the houses
+	local ThaelariousNames = api:GetCardsInList(api:GetListID("Thaelarious Houses",treldata)) --this gets some of the houses
 	local AllHouses = {}
 
 	for i,v in pairs(SorenNames) do
@@ -33,6 +34,7 @@ function houses.Init()
 	for i,v in pairs(ThaelariousNames) do
 		table.insert(AllHouses,ThaelariousNames[i])
 	end
+	--These insert the houses into the 'allhouses' table
 
 
 
@@ -51,10 +53,10 @@ function houses.Init()
 					["Treasure"] = "",
 					["Nobility"] = "",
 					["Status"] = "",
-				}
+				}--Creates basic template for house. 
 			}
 
-			local function AddNewData(D,V)
+			local function AddNewData(D,V)--this is used to a new data  thingy to the house in the trello.  
 				--print(card.desc..D..V.."|-|")
 				for i,v in pairs(Datas) do
 					if string.find(string.gsub(v,"|-|",""),D) then
@@ -68,7 +70,7 @@ function houses.Init()
 				)
 				task.wait(1)
 			end
-			local function GetDataPiece(keyword)
+			local function GetDataPiece(keyword) --This whole functions goes through the string and takes out all the unnecessary crap. Then it returns the ultimate value of the data.
 				for _,D in pairs(Datas) do
 
 					if string.find(D,keyword) then
@@ -90,7 +92,7 @@ function houses.Init()
 					end
 				end
 			end
-			local function Filter()
+			local function Filter() -- this just filters stuff i wanna filter. 
 
 				local returnD = card.desc
 				returnD = string.gsub(returnD,"Low-Class","Low{{Class")
@@ -102,7 +104,7 @@ function houses.Init()
 				)
 
 			end
-			local function GetDataPieceUnfiltered(keyword)
+			local function GetDataPieceUnfiltered(keyword) -- this just gets the ulfiltered data. 
 				for _,D in pairs(Datas) do
 					if string.find(D,keyword) then
 						local returnD = string.gsub(D,"|-|","")
@@ -110,7 +112,7 @@ function houses.Init()
 					end
 				end
 			end
-			local function Remove(keyword)
+			local function Remove(keyword) --this removes things from the card description, thus, taking away the data. It can be used if something goes wrong and the script spams things into the trello cards.
 				if keyword == nil then return end
 				local newdesc = string.gsub(card.desc,keyword,"")
 				print(newdesc)
@@ -136,10 +138,6 @@ function houses.Init()
 			HouseData[GetDataPiece("Kingdom")][card.name] = TableWomb[card.name]
 
 		end
-	end
-
-	for i,v in pairs(HouseData.Soren) do
-		print(i.."House name")
 	end	
 	game.ReplicatedStorage.HousesLoaded.Value = true
 
