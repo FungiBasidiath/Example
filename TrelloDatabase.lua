@@ -1,4 +1,6 @@
 --This gets Data from a trello board and turns it into a table.
+-- Discord name: WLncstr
+-- ROBLOX NAME: TheSingularFungi
 local houses = {}
 
 
